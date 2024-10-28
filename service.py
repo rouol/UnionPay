@@ -110,7 +110,10 @@ def get_unionpay_exchange_rate(base_currency: str, target_currency: str) -> typi
             return round(1/UNIONPAY_DATA['exchange_rate'][f'CNY_{base_currency}']*1.0125, 6)
         else:
             if target_currency in UNIONPAY_DATA['target_currencies']:
-                return round(1/UNIONPAY_DATA['exchange_rate'][f'CNY_{base_currency}']*UNIONPAY_DATA['exchange_rate'][f'CNY_{target_currency}']*1.008, 6  )
+                if target_currency == 'EUR':
+                    return round(1/UNIONPAY_DATA['exchange_rate'][f'CNY_{base_currency}']*UNIONPAY_DATA['exchange_rate'][f'CNY_{target_currency}']*1.01, 6)
+                else:
+                    return round(1/UNIONPAY_DATA['exchange_rate'][f'CNY_{base_currency}']*UNIONPAY_DATA['exchange_rate'][f'CNY_{target_currency}']*1.008, 6)
             else:
                 return None
     else:
