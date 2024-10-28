@@ -27,3 +27,8 @@ async def home():
         'cbr_update_time': service.get_cbr_update_time(),
     }
     return render_template('pages/home.html', section='home', title='Главная', data=data)
+
+# serve content from /static/ico folder to /
+@app.route('/<path:path>')
+async def send_ico(path):
+    return send_from_directory('static/ico', path)
