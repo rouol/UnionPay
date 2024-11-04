@@ -158,20 +158,24 @@ def get_exchange_rate_list(base_currency: str) -> typing.List[str]:
     # then: USD, EUR, TRY, AED, THB, HKD, GBP, JPY, AUD, CAD, SGD
     # then other currencies in alphabetical order
     exchange_rate_list_main = []
-    exchange_rate_list_main.append(('CNY', CBR_DATA['nominal'].get('CNY'), math.ceil(exchange_rate_dict.get('CNY')*CBR_DATA['nominal'].get('CNY')*10000)/10000, math.ceil(CBR_DATA['value'].get('CNY')*10000)/10000))
-    exchange_rate_list_main.append(('USD', CBR_DATA['nominal'].get('USD'), math.ceil(exchange_rate_dict.get('USD')*CBR_DATA['nominal'].get('USD')*10000)/10000, math.ceil(CBR_DATA['value'].get('USD')*10000)/10000))
-    exchange_rate_list_main.append(('EUR', CBR_DATA['nominal'].get('EUR'), math.ceil(exchange_rate_dict.get('EUR')*CBR_DATA['nominal'].get('EUR')*10000)/10000, math.ceil(CBR_DATA['value'].get('EUR')*10000)/10000))
-    exchange_rate_list_main.append(('TRY', 1, math.ceil(exchange_rate_dict.get('TRY')*10000)/10000, math.ceil(CBR_DATA['exchange_rate'].get('TRY')*10000)/10000))
-    exchange_rate_list_main.append(('AED', CBR_DATA['nominal'].get('AED'), math.ceil(exchange_rate_dict.get('AED')*CBR_DATA['nominal'].get('AED')*10000)/10000, math.ceil(CBR_DATA['value'].get('AED')*10000)/10000))
-    exchange_rate_list_main.append(('THB', 1, math.ceil(exchange_rate_dict.get('THB')*10000)/10000, math.ceil(CBR_DATA['exchange_rate'].get('THB')*10000)/10000))
-    exchange_rate_list_main.append(('VND', 1000, math.ceil(exchange_rate_dict.get('VND')*1000*10000)/10000, math.ceil(CBR_DATA['exchange_rate'].get('VND')*1000*10000)/10000))
-    exchange_rate_list_main.append(('HKD', CBR_DATA['nominal'].get('HKD'), math.ceil(exchange_rate_dict.get('HKD')*CBR_DATA['nominal'].get('HKD')*10000)/10000, math.ceil(CBR_DATA['value'].get('HKD')*10000)/10000))
-    exchange_rate_list_main.append(('JPY', CBR_DATA['nominal'].get('JPY'), math.ceil(exchange_rate_dict.get('JPY')*CBR_DATA['nominal'].get('JPY')*10000)/10000, math.ceil(CBR_DATA['value'].get('JPY')*10000)/10000))
+    exchange_rate_list_main.append(('CNY', CBR_DATA['nominal'].get('CNY'), round(exchange_rate_dict.get('CNY')*CBR_DATA['nominal'].get('CNY'), 3), round(CBR_DATA['value'].get('CNY'), 3)))
+    exchange_rate_list_main.append(('USD', CBR_DATA['nominal'].get('USD'), round(exchange_rate_dict.get('USD')*CBR_DATA['nominal'].get('USD'), 3), round(CBR_DATA['value'].get('USD'), 3)))
+    exchange_rate_list_main.append(('EUR', CBR_DATA['nominal'].get('EUR'), round(exchange_rate_dict.get('EUR')*CBR_DATA['nominal'].get('EUR'), 3), round(CBR_DATA['value'].get('EUR'), 3)))
+    exchange_rate_list_main.append(('TRY', 1, round(exchange_rate_dict.get('TRY'), 3), round(CBR_DATA['exchange_rate'].get('TRY'), 3)))
+    exchange_rate_list_main.append(('AED', CBR_DATA['nominal'].get('AED'), round(exchange_rate_dict.get('AED')*CBR_DATA['nominal'].get('AED'), 3), round(CBR_DATA['value'].get('AED'), 3)))
+    exchange_rate_list_main.append(('THB', 1, round(exchange_rate_dict.get('THB'), 3), round(CBR_DATA['exchange_rate'].get('THB'), 3)))
+    exchange_rate_list_main.append(('VND', 1000, round(exchange_rate_dict.get('VND')*1000, 3), round(CBR_DATA['exchange_rate'].get('VND')*1000, 3)))
+    exchange_rate_list_main.append(('HKD', CBR_DATA['nominal'].get('HKD'), round(exchange_rate_dict.get('HKD')*CBR_DATA['nominal'].get('HKD'), 3), round(CBR_DATA['value'].get('HKD'), 3)))
+    exchange_rate_list_main.append(('JPY', CBR_DATA['nominal'].get('JPY'), round(exchange_rate_dict.get('JPY')*CBR_DATA['nominal'].get('JPY'), 3), round(CBR_DATA['value'].get('JPY'), 3)))
     exchange_rate_list = []
     for currency, rate in exchange_rate_dict.items():
         if currency not in ('CNY', 'USD', 'EUR', 'TRY', 'AED', 'THB', 'VND', 'HKD', 'JPY'):
             nominal = CBR_DATA['nominal'].get(currency) if CBR_DATA['nominal'].get(currency) else 1
-            exchange_rate_list.append((currency, nominal, math.ceil(rate*nominal*10000)/10000, CBR_DATA['value'].get(currency)))
+            if CBR_DATA['value'].get(currency):
+                _cbr_rate = round(CBR_DATA['value'].get(currency), 3)
+            else:
+                _cbr_rate = None
+            exchange_rate_list.append((currency, nominal, round(rate*nominal, 3), _cbr_rate))
     # sort the remaining currencies in alphabetical order
     exchange_rate_list.sort(key=lambda x: x[0])
     return exchange_rate_list_main, exchange_rate_list
